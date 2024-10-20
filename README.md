@@ -59,7 +59,7 @@ If typing `nix develop --impure ...` gets tiring, you can automatically enter
 the desired project development environment by installing `direnv` and creating
 a `.envrc` file with the following contents:
 
-```
+```shell
 use flake --impure github:element-hq/nix-flakes#synapse
 ```
 
@@ -145,15 +145,15 @@ language that returns a devenv module. A basic example of a `module.nix`:
 To test a development environment locally without pushing it to git, you can
 use the following to reference a development environment in a local directory:
 
-```
+```shell
 nix develop path:///home/work/code/nix-flakes#synapse --impure
 ```
 
-...which would drop you into a new `synapse` development environment shell.
+... which would drop you into a new `synapse` development environment shell.
 
 The same can be done when using `direnv`. Just set your `.envrc` file to:
 
-```
+```shell
 use flake path:///home/work/code/nix-flakes#synapse --impure
 ```
 
