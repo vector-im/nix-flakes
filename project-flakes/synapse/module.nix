@@ -54,7 +54,7 @@
   # Automatically activate the poetry virtualenv upon entering the shell.
   languages.python.poetry.activate.enable = true;
   # Install all extra Python dependencies; this is needed to run the unit
-  # tests and utilitise all Synapse features.
+  # tests and utilise all Synapse features.
   languages.python.poetry.install.arguments = ["--extras all"];
   # Install the 'matrix-synapse' package from the local checkout.
   languages.python.poetry.install.installRootPackage = true;
