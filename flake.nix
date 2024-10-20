@@ -1,7 +1,7 @@
 {
   inputs = {
     # Aim for the latest versions of packages by default.
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     # A development environment manager built on Nix. See https://devenv.sh.
     devenv.url = "github:cachix/devenv/v1.0.7";
     # Output a development shell for x86_64/aarch64 Linux/Darwin (MacOS).
