@@ -43,7 +43,7 @@
   # corresponding Nix packages on https://search.nixos.org/packages.
   #
   # This was done until `./install-deps.pl --dryrun` produced no output.
-  env.PERL5LIB = "${with pkgs.perl536Packages; makePerlPath [
+  env.PERL5LIB = "${with pkgs.perl538Packages; makePerlPath [
     DBI
     ClassMethodModifiers
     CryptEd25519

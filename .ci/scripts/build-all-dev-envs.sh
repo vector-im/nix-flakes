@@ -5,7 +5,7 @@ PROJECT_FLAKES_DIR="project-flakes"
 set -ex
 
 # Loop through each sub-directory in 'project-flakes'
-for project in "$PROJECT_FLAKES_DIR"/*/ ; do  
+for project in "$PROJECT_FLAKES_DIR"/*/ ; do
   # Remove the trailing '/'
   project=${project%*/}
   # Extract the project name
@@ -24,7 +24,7 @@ for project in "$PROJECT_FLAKES_DIR"/*/ ; do
   # Enter the project directory.
   cd "$project"
   # Show the generated outputs of the flake.
-  nix flake show ..
+  nix flake show --impure ..
   # Attempt to build and enter the development environment,
   # then run the specified test command.
   nix develop --impure ..#"$project" -c bash -c "$cmd"
