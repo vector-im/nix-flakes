@@ -7,10 +7,10 @@
   # Search for package names at https://search.nixos.org/packages?channel=unstable
   packages = with pkgs; [
     # The rust toolchain and related tools.
-    (rust-bin.stable."1.66.0".default.override {
+    (rust-bin.stable."1.70.0".default.override {
       extensions = [ "rust-src" ];
     })
-    
+
     # For enabling faster Rust compile times. See the `env` option below.
     clang
     mold
