@@ -1,6 +1,4 @@
-# ci.project-url: https://github.com/matrix-org/synapse
-# ci.test-command: python -m synapse.app.homeserver --server-name local -c homeserver.yaml --generate-config --report-stats=no
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   # Configure packages to install.
@@ -9,10 +7,7 @@
     # The rust toolchain and related tools.
     # This will install the "default" profile of rust components.
     # https://rust-lang.github.io/rustup/concepts/profiles.html
-    #
-    # NOTE: We currently need to set the Rust version unnecessarily high
-    # in order to work around https://github.com/matrix-org/synapse/issues/15939
-    (rust-bin.stable."1.75.0".default.override {
+    (rust-bin.stable."1.66.0".default.override {
       # Additionally install the "rust-src" extension to allow diving into the
       # Rust source code in an IDE (rust-analyzer will also make use of it).
       extensions = [ "rust-src" ];
@@ -59,15 +54,6 @@
   # Install the 'matrix-synapse' package from the local checkout.
   languages.python.poetry.install.installRootPackage = true;
 
-  # This is a work-around for NixOS systems. NixOS is special in
-  # that you can have multiple versions of packages installed at
-  # once, including your libc linker!
-  #
-  # Some binaries built for Linux expect those to be in a certain
-  # filepath, but that is not the case on NixOS. In that case, we
-  # force compiling those binaries locally instead.
-  env.POETRY_INSTALLER_NO_BINARY = "ruff";
-
   # Postgres is needed to run Synapse with postgres support and
   # to run certain unit tests that require postgres.
   services.postgres.enable = true;
@@ -93,7 +79,7 @@
   #  * ensures a directory containing two additional homeserver config files exists;
   #    one to configure using the development environment's PostgreSQL as the
   #    database backend and another for enabling Redis support.
-  process.before = ''
+  process.manager.before = ''
     python -m synapse.app.homeserver -c homeserver.yaml --generate-config --server-name=synapse.dev --report-stats=no
     mkdir -p homeserver-config-overrides.d
     cat > homeserver-config-overrides.d/database.yaml << EOF
@@ -130,4 +116,12 @@
   enterShell = ''
     unset LD_LIBRARY_PATH
   '';
+
+  tasks."synapse:patch-python-binaries" = {
+    description = "Patch binaries dynamically linked to ld, which will not work on NixOS";
+    exec = "${lib.getExe pkgs.patchelf} --set-interpreter ${pkgs.stdenv.cc.bintools.dynamicLinker} $VIRTUAL_ENV/bin/ruff";
+    
+    # wait until ruff is installed first.
+    after = [ "devenv:python:poetry" ];
+  };
 }

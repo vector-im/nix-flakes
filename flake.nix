@@ -1,7 +1,7 @@
 {
   inputs = {
     # A development environment manager built on Nix. See https://devenv.sh.
-    devenv.url = "github:cachix/devenv/v1.0.7";
+    devenv.url = "github:cachix/devenv/v1.3.1";
     # Output a development shell for x86_64/aarch64 Linux/Darwin (MacOS).
     systems.url = "github:nix-systems/default";
     # Rust toolchain.
@@ -64,11 +64,7 @@
         #
         # Note: using builtins.readDir is only allowed if `--impure` is
         # passed to the `nix develop` invocation.
-        # devenv currently requires this, but eventually will not.
-        # See https://github.com/cachix/devenv/pull/745
-        #
-        # When that happens, we could modify this to be a hardcoded list of
-        # project names, to avoid users needing to specify `--impure`.
+        # devenv already requires `--impure` to work with flakes.
         }) (builtins.attrNames (builtins.readDir projectFlakesDirectory)))
       );
       # Define a flake output `composeShell`, which is a function that takes
@@ -96,18 +92,6 @@
               ];
             }) projectNames;
           };
-        }
-      );
-      # Define a function `setupPackages` that downstream flakes can use to correctly
-      # configure the `devenv up` functionality.
-      #
-      # This function creates an entry intended to be inserted into a downstream flake's
-      # `packages` flake output.
-      #
-      # See the README for how to use this in a downstream flake.
-      setupPackages = projectName: forEachSystem (system:
-        {
-          devenv-up = self.devShells.${system}.${projectName}.config.procfileScript;
         }
       );
     };

@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
 jobs:
+  # TODO: Can we have each project build be a separate runner?
   build-linux:
     runs-on: ubuntu-latest
     steps:

@@ -7,7 +7,7 @@
   # Search for package names at https://search.nixos.org/packages?channel=unstable
   packages = with pkgs; [
     # For performing Matrix olm/megolm crypto.
-    olm
+    # olm
   ];
 
   # Install the latest version of the Go programming language.
